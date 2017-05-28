@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "formatters": {
+    "space": {
+      "class": "logging.Formatter",
+      "format": "{asctime} {name} {levelname} {message}",
+      "datefmt": "%H:%M:%S",
+      "style": "{"
+    }
+  },
+  "handlers": {
+    "console": {
+      "class": "logging.StreamHandler",
+      "level": "DEBUG",
+      "formatter": "space",
+      "stream": "ext://sys.stdout"
+    }
+  },
+  "loggers": {
+    "pasta": {
+      "level": "DEBUG",
+      "handlers": ["console"],
+      "propagate": 0
+    },
+    "__main__": {
+      "level": "DEBUG",
+      "handlers": ["console"],
+      "propagate": 0
+    }
+  }
+}
