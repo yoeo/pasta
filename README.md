@@ -12,9 +12,7 @@ directly on channels. The source code is converted into a file and its
 
 #### Preview
 
-<a href="http://guesslang.readthedocs.io/en/latest/_static/videos/pasta.webm">
-  <img src="data/pasta.png" alt="Pasta preview_"/>
-</a>
+![](data/pasta.gif)
 
 ## Install & Run
 
@@ -27,7 +25,7 @@ directly on channels. The source code is converted into a file and its
 * Install **Pasta** on your server:
 
 ```bash
-python3 setup.py install
+pip install .
 ```
 
 * Run **Pasta**:
