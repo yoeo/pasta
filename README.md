@@ -25,7 +25,7 @@ directly on channels. The source code is converted into a file and its
 * Install **Pasta** on your server:
 
 ```bash
-pip install .
+pip3 install .
 ```
 
 * Run **Pasta**:
