@@ -2,6 +2,7 @@
 
 import json
 import logging.config
+import os
 from pathlib import Path
 import urllib.parse
 import urllib.request
@@ -16,8 +17,15 @@ logging.config.dictConfig(
     json.loads(CONFIG.joinpath('logging.json').read_text()))
 LOGGER = logging.getLogger(__name__)
 
-TITLE = "pasted by @{}"
 TOKENS = json.loads(CONFIG.joinpath('tokens.json').read_text())
+
+# Pypass config file with environment variables
+if 'PASTA_TOKEN_BOTUSER' in os.environ:
+    TOKENS['bot-user'] = os.environ['PASTA_TOKEN_BOTUSER']
+if 'PASTA_TOKEN_SLASHCMD' in os.environ:
+    TOKENS['slash-cmd'] = os.environ['PASTA_TOKEN_SLASHCMD']
+
+TITLE = "pasted by @{}"
 UPLOAD = 'https://slack.com/api/files.upload?{}'
 LANGUAGES = {
   'C': 'c',
@@ -58,10 +66,9 @@ def index():
 
 
 def _process(data):
-    tokens = data.get('token', [])
-    if not any(token in TOKENS['slash-cmd'] for token in tokens):
+    if not TOKENS['slash-cmd'] in data.get('token', []):
         LOGGER.error("Unauthorized")
-        return 'Unauthorized!'
+        return "Unauthorized!"
 
     content = ''.join(data['text'])
     fileinfo = {
@@ -77,10 +84,13 @@ def _process(data):
         payload = json.loads(response.read().decode())
         if not payload['ok']:
             LOGGER.error("File upload failed: %s", payload)
-            return 'Cannot /paste on private channels'
+            return (
+                "/paste don't work in private channels :-(\n"
+                "Help us add this feature at https://github.com/yoeo/pasta"
+            )
 
     LOGGER.info("File uploaded")
-    return ''  # OK
+    return ""  # OK
 
 
 if __name__ == '__main__':

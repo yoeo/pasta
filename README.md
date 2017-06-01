@@ -34,6 +34,38 @@ pip3 install .
 pasta-gunicorn
 ```
 
+* You can also provide the slack tokens as environment variables
+
+```bash
+PASTA_TOKEN_BOTUSER="my-bot-user-token" \
+  PASTA_TOKEN_SLASHCMD="my-slash-command-token" \
+  pasta-gunicorn
+```
+
+## Create and run Pasta Docker container
+
+* Create **Pasta** container
+
+```bash
+docker build -t pasta-img .
+docker create -p 8000:8000 --name pasta \
+  -e PASTA_TOKEN_BOTUSER="my-bot-user-token" \
+  -e PASTA_TOKEN_SLASHCMD="my-slash-command-token" \
+  pasta-img
+```
+
+* Start **Pasta** container
+
+```bash
+docker start pasta
+```
+
+* Stop **Pasta** container
+
+```bash
+docker stop pasta
+```
+
 ## License and stuff...
 
 * [Language detection powered by Guesslang](https://github.com/yoeo/guesslang)
