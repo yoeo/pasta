@@ -11,47 +11,33 @@ from flask import Flask, request
 from guesslang import Guess
 
 
-CONFIG = Path(__file__).parent.joinpath('config')
+def update_with_env(config):
+    for name in config:
+        env_name = 'PASTA_{}'.format(name.replace('-', '_').upper())
+        if env_name in os.environ:
+            config[name] = os.environ[env_name]
 
+
+CONFIGDIR = Path(__file__).parent.joinpath('config')
+
+# Logging
 logging.config.dictConfig(
-    json.loads(CONFIG.joinpath('logging.json').read_text()))
+    json.loads(CONFIGDIR.joinpath('logging.json').read_text()))
 LOGGER = logging.getLogger(__name__)
 
-TOKENS = json.loads(CONFIG.joinpath('tokens.json').read_text())
+# Configuration
+CONFIG = json.loads(CONFIGDIR.joinpath('config.json').read_text())
+update_with_env(CONFIG)  # Bypass config file with environment variables
 
-# Pypass config file with environment variables
-if 'PASTA_TOKEN_BOTUSER' in os.environ:
-    TOKENS['bot-user'] = os.environ['PASTA_TOKEN_BOTUSER']
-if 'PASTA_TOKEN_SLASHCMD' in os.environ:
-    TOKENS['slash-cmd'] = os.environ['PASTA_TOKEN_SLASHCMD']
-
+# Comunication data
 TITLE = "pasted by @{}"
 UPLOAD = 'https://slack.com/api/files.upload?{}'
-LANGUAGES = {
-  'C': 'c',
-  'C++': 'cpp',
-  'C#': 'csharp',
-  'CSS': 'css',
-  'Erlang': 'erlang',
-  'Go': 'go',
-  'HTML': 'html',
-  'Java': 'java',
-  'Javascript': 'javascript',
-  'Markdown': 'markdown',
-  'Objective-C': 'objc',
-  'PHP': 'php',
-  'Perl': 'perl',
-  'Python': 'python',
-  'Ruby': 'ruby',
-  'Rust': 'rust',
-  'Scala': 'scala',
-  'Shell': 'shell',
-  'SQL': 'sql',
-  'Swift': 'swift'
-}
+REQUIRED_FIELDS = ['token', 'text', 'user_name', 'channel_id']
+LANGUAGES = json.loads(CONFIGDIR.joinpath('languages.json').read_text())
 
+# Application
 app = Flask(__name__)
-app.config.update({'DEBUG': True, 'SECRET_KEY': TOKENS['flask']})
+app.config.update({'DEBUG': int(CONFIG['debug'])})
 
 guess = Guess()
 
@@ -66,13 +52,17 @@ def index():
 
 
 def _process(data):
-    if not TOKENS['slash-cmd'] in data.get('token', []):
+    if not all(field in data for field in REQUIRED_FIELDS):
+        LOGGER.error("Required data missing")
+        return "Required data missing"
+
+    if not CONFIG['client-id'] in data.get('token', []):
         LOGGER.error("Unauthorized")
         return "Unauthorized!"
 
     content = ''.join(data['text'])
     fileinfo = {
-        'token': TOKENS['bot-user'],
+        'token': CONFIG['bot-token'],
         'content': content,
         'filetype': LANGUAGES[guess.language_name(content)],
         'title': TITLE.format(data['user_name'][0]),

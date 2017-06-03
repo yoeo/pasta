@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 setup(
     name="pasta",
     author="yoeo",
-    version="0.1",
+    version="0.2",
     url="https://github.com/yoeo/pasta",
     license="MIT",
     description="Pretty Paste source code on Slack, language autodetected",

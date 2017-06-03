@@ -18,13 +18,11 @@ directly on channels. The source code is converted into a file and its
 
 * Python 3.5+ required
 
-* Create your Slack app https://api.slack.com/
+* Create your Slack app and tokens https://api.slack.com/:
 
-* Find your Slack tokens in the app settings:
+  - Find Client ID at `Basic Information > App Credentials > Client ID`
 
-  - Bot user token at `OAuth & Permissions > OAuth Tokens & Redirect URLs > Tokens for Your Team > Bot User OAuth Access Token`
-
-  - Slash command token at `Basic Information > App Credentials > Client ID`
+  - and Bot token at `OAuth & Permissions > OAuth Tokens & Redirect URLs > Tokens for Your Team > Bot User OAuth Access Token`
 
 * Fill [config/tokens.json](config/tokens.json) with your Slack app tokens
 
@@ -40,11 +38,12 @@ pip3 install .
 pasta-gunicorn
 ```
 
-* You can also provide the slack tokens as environment variables
+* You can also provide the tokens as environment variables
 
 ```bash
-PASTA_TOKEN_BOTUSER="my-bot-user-token" \
-  PASTA_TOKEN_SLASHCMD="my-slash-command-token" \
+PASTA_DEBUG=1 \
+  PASTA_BOT_TOKEN="my-bot-user-token" \
+  PASTA_CLIENT_ID="my-app-client-id" \
   pasta-gunicorn
 ```
 
@@ -55,8 +54,8 @@ PASTA_TOKEN_BOTUSER="my-bot-user-token" \
 ```bash
 docker build -t pasta-img .
 docker create -p 8000:8000 --name pasta \
-  -e PASTA_TOKEN_BOTUSER="my-bot-user-token" \
-  -e PASTA_TOKEN_SLASHCMD="my-slash-command-token" \
+  -e PASTA_BOT_TOKEN="my-bot-user-token" \
+  -e PASTA_CLIENT_ID="my-app-client-id" \
   pasta-img
 ```
 
