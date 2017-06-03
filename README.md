@@ -20,6 +20,12 @@ directly on channels. The source code is converted into a file and its
 
 * Create your Slack app https://api.slack.com/
 
+* Find your Slack tokens in the app settings:
+
+  - Bot user token at `OAuth & Permissions > OAuth Tokens & Redirect URLs > Tokens for Your Team > Bot User OAuth Access Token`
+
+  - Slash command token at `Basic Information > App Credentials > Client ID`
+
 * Fill [config/tokens.json](config/tokens.json) with your Slack app tokens
 
 * Install **Pasta** on your server:
