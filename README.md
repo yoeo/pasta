@@ -80,4 +80,4 @@ docker stop pasta
 * Icon created by
   [Demograph™ (Creative Commons)](https://thenounproject.com/term/spaghetti/187779/)
 
-* Pasta — Copyright (c) 2017 Y. SOMDA, [MIT License](LICENSE)
+* Pasta — Copyright (c) 2020 Y. SOMDA, [MIT License](LICENSE)

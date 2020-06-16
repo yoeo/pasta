@@ -61,10 +61,15 @@ def _process(data):
         return "Unauthorized!"
 
     content = ''.join(data['text'])
+    language_name = guess.language_name(content)
+    filetype = LANGUAGES.get(language_name)
+    if not filetype:
+        return "Unsupported file format"
+
     fileinfo = {
         'token': CONFIG['bot-token'],
         'content': content,
-        'filetype': LANGUAGES[guess.language_name(content)],
+        'filetype': filetype,
         'title': TITLE.format(data['user_name'][0]),
         'channels': data['channel_id'][0]
     }
