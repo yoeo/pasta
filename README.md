@@ -16,7 +16,7 @@ directly on channels. The source code is converted into a file and its
 
 ## Install & Run
 
-* Python 3.5+ required
+* Python 3.6+ required
 
 * Create your Slack app and tokens https://api.slack.com/:
 
